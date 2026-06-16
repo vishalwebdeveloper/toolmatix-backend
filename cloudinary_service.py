@@ -11,14 +11,14 @@ cloudinary.config(
 )
 
 
-def upload_featured_image(file):
+# def upload_featured_image(file):
 
-    result = cloudinary.uploader.upload(
-        file.file,
-        folder="toolmatix/blogs/featured"
-    )
+#     result = cloudinary.uploader.upload(
+#         file.file,
+#         folder="toolmatix/blogs/featured"
+#     )
 
-    return result["secure_url"]
+#     return result["secure_url"]
 
 def upload_editor_image(file):
 

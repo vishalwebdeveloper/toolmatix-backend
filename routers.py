@@ -29,7 +29,7 @@ async def create_blog_api(
     description: str = Form(...),
     tags: str = Form(""),
     status: str = Form("draft"),
-    featured_image: UploadFile = File(...),
+    featured_image: str = Form(...),  # Cloudinary URL
     db: Session = Depends(get_db)
 ):
 
@@ -42,6 +42,28 @@ async def create_blog_api(
         status,
         featured_image
     )
+
+# old api code
+# @router.post("")
+# async def create_blog_api(
+#     title: str = Form(...),
+#     short_description: str = Form(...),
+#     description: str = Form(...),
+#     tags: str = Form(""),
+#     status: str = Form("draft"),
+#     featured_image: UploadFile = File(...),
+#     db: Session = Depends(get_db)
+# ):
+
+#     return create_blog(
+#         db,
+#         title,
+#         short_description,
+#         description,
+#         tags,
+#         status,
+#         featured_image
+#     )
 # upload editor image for the description image api endpoint
 
 @router.post(

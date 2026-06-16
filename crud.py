@@ -2,9 +2,9 @@ import json
 import re
 
 from models import Blog
-from cloudinary_service import (
-    upload_featured_image
-)
+# from cloudinary_service import (
+#     upload_featured_image
+# )
 
 
 def generate_slug(title):
@@ -18,8 +18,7 @@ def generate_slug(title):
     )
 
     return slug.strip('-')
-
-
+# new crud api
 def create_blog(
     db,
     title,
@@ -30,27 +29,54 @@ def create_blog(
     featured_image
 ):
 
-    featured_url = upload_featured_image(
-        featured_image
-    )
-
     blog = Blog(
         title=title,
         slug=generate_slug(title),
         short_description=short_description,
         description=description,
-        featured_image=featured_url,
+        featured_image=featured_image,  # Direct Cloudinary URL
         tags=tags,
         status=status
     )
 
     db.add(blog)
-
     db.commit()
-
     db.refresh(blog)
 
     return blog
+# old crud api
+
+# def create_blog(
+#     db,
+#     title,
+#     short_description,
+#     description,
+#     tags,
+#     status,
+#     featured_image
+# ):
+
+#     featured_url = upload_featured_image(
+#         featured_image
+#     )
+
+#     blog = Blog(
+#         title=title,
+#         slug=generate_slug(title),
+#         short_description=short_description,
+#         description=description,
+#         featured_image=featured_url,
+#         tags=tags,
+#         status=status
+#     )
+
+#     db.add(blog)
+
+#     db.commit()
+
+#     db.refresh(blog)
+
+#     return blog
 
 def get_all_blogs(db):
 
