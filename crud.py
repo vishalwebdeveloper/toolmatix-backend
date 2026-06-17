@@ -1,5 +1,6 @@
 import json
 import re
+from fastapi import HTTPException
 
 from models import Blog
 # from cloudinary_service import (
@@ -96,3 +97,123 @@ def get_published_blogs(db):
         .order_by(Blog.id.desc())
         .all()
     )
+
+def get_blog_by_id(db, blog_id: int):
+
+    blog = (
+        db.query(Blog)
+        .filter(Blog.id == blog_id)
+        .first()
+    )
+
+    if not blog:
+        raise HTTPException(
+            status_code=404,
+            detail="Blog not found"
+        )
+
+    return blog
+
+
+def delete_blog(db, blog_id: int):
+
+    blog = (
+        db.query(Blog)
+        .filter(Blog.id == blog_id)
+        .first()
+    )
+
+    if not blog:
+        raise HTTPException(
+            status_code=404,
+            detail="Blog not found"
+        )
+
+    db.delete(blog)
+    db.commit()
+
+    return {
+        "success": True,
+        "message": "Blog deleted successfully"
+    }
+
+
+def update_blog(
+    db,
+    blog_id,
+    title,
+    short_description,
+    description,
+    tags,
+    status,
+    featured_image
+):
+
+    blog = (
+        db.query(Blog)
+        .filter(Blog.id == blog_id)
+        .first()
+    )
+
+    if not blog:
+        raise HTTPException(
+            status_code=404,
+            detail="Blog not found"
+        )
+
+    blog.title = title
+    blog.slug = generate_slug(title)
+    blog.short_description = short_description
+    blog.description = description
+    blog.tags = tags
+    blog.status = status
+    blog.featured_image = featured_image
+
+    db.commit()
+    db.refresh(blog)
+
+    return blog
+
+
+def update_blog_status(
+    db,
+    blog_id: int
+):
+
+    blog = (
+        db.query(Blog)
+        .filter(Blog.id == blog_id)
+        .first()
+    )
+
+    if not blog:
+        raise HTTPException(
+            status_code=404,
+            detail="Blog not found"
+        )
+
+    current_status = (
+        blog.status.lower()
+    )
+
+    if current_status == "draft":
+        blog.status = "published"
+        message = (
+            "Blog published successfully"
+        )
+
+    else:
+        blog.status = "draft"
+        message = (
+            "Blog moved to draft successfully"
+        )
+
+    db.commit()
+    db.refresh(blog)
+
+    return {
+        "success": True,
+        "blog_id": blog.id,
+        "status": blog.status,
+        "message": message
+    }

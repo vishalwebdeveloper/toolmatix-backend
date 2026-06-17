@@ -9,7 +9,11 @@ from typing import List
 from crud import (
     create_blog,
     get_all_blogs,
-    get_published_blogs
+    get_published_blogs,
+    get_blog_by_id,
+    delete_blog,
+    update_blog,
+    update_blog_status
 )
 from cloudinary_service import (
     upload_editor_image
@@ -96,3 +100,56 @@ def published_blogs(
 ):
 
     return get_published_blogs(db)
+
+@router.get("/{blog_id}")
+def get_blog(
+    blog_id: int,
+    db: Session = Depends(get_db)
+):
+    return get_blog_by_id(
+        db,
+        blog_id
+    )
+
+@router.delete("/{blog_id}")
+def remove_blog(
+    blog_id: int,
+    db: Session = Depends(get_db)
+):
+    return delete_blog(
+        db,
+        blog_id
+    )
+
+@router.put("/{id}")
+async def edit_blog(
+    blog_id: int,
+    title: str = Form(...),
+    short_description: str = Form(...),
+    description: str = Form(...),
+    tags: str = Form(""),
+    status: str = Form("draft"),
+    featured_image: str = Form(...),
+    db: Session = Depends(get_db)
+):
+
+    return update_blog(
+        db,
+        blog_id,
+        title,
+        short_description,
+        description,
+        tags,
+        status,
+        featured_image
+    )
+
+@router.patch("/{blog_id}/status")
+def change_status(
+    blog_id: int,
+    db: Session = Depends(get_db)
+):
+    return update_blog_status(
+        db,
+        blog_id
+    )
