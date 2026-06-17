@@ -114,6 +114,21 @@ def get_blog_by_id(db, blog_id: int):
 
     return blog
 
+def get_blog_by_slug(db, slug: str):
+
+    blog = (
+        db.query(Blog)
+        .filter(Blog.slug == slug)
+        .first()
+    )
+
+    if not blog:
+        raise HTTPException(
+            status_code=404,
+            detail="Blog not found"
+        )
+
+    return blog
 
 def delete_blog(db, blog_id: int):
 

@@ -13,7 +13,8 @@ from crud import (
     get_blog_by_id,
     delete_blog,
     update_blog,
-    update_blog_status
+    update_blog_status,
+    get_blog_by_slug
 )
 from cloudinary_service import (
     upload_editor_image
@@ -101,7 +102,7 @@ def published_blogs(
 
     return get_published_blogs(db)
 
-@router.get("/{blog_id}")
+@router.get("/id/{blog_id}")
 def get_blog(
     blog_id: int,
     db: Session = Depends(get_db)
@@ -109,6 +110,16 @@ def get_blog(
     return get_blog_by_id(
         db,
         blog_id
+    )
+
+@router.get("/{slug}")
+def get_blog(
+    slug: str,
+    db: Session = Depends(get_db)
+):
+    return get_blog_by_slug(
+        db,
+        slug
     )
 
 @router.delete("/{blog_id}")
