@@ -4,6 +4,7 @@ from database import Base
 from database import engine
 from fastapi.middleware.cors import CORSMiddleware
 from routers import router
+# from healthrouters import health_check
 
 Base.metadata.create_all(
     bind=engine
@@ -25,3 +26,4 @@ app.add_middleware(
     allow_headers=["*"],
 )
 app.include_router(router)
+# app.include_router(health_check)

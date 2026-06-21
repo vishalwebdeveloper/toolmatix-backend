@@ -25,7 +25,12 @@ router=APIRouter(
     prefix="/blog",
     tags=["Blogs"]
 )
-
+@router.get("/health")
+async def health_check():
+    return {
+        "status": "healthy",
+        "timestamp": "alive"
+    }
 # create a blog api endpoint
 @router.post("")
 async def create_blog_api(
@@ -164,3 +169,4 @@ def change_status(
         db,
         blog_id
     )
+
