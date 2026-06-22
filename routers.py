@@ -27,7 +27,7 @@ router=APIRouter(
     prefix="/blog",
     tags=["Blogs"]
 )
-@router.get("/health")
+@router.api_route("/health", methods=["GET", "HEAD"])
 async def health_check():
     current_time = datetime.now(ZoneInfo("Asia/Kolkata"))
 
