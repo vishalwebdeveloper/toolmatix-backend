@@ -20,16 +20,20 @@ from cloudinary_service import (
     upload_editor_image
 )
 from database import get_db
- 
+from datetime import datetime
+
 router=APIRouter(
     prefix="/blog",
     tags=["Blogs"]
 )
 @router.get("/health")
 async def health_check():
+    current_time = datetime.now()
+
     return {
         "status": "healthy",
-        "timestamp": "alive"
+        "date": current_time.strftime("%d-%m-%Y"),
+        "time": current_time.strftime("%I:%M:%S %p")
     }
 # create a blog api endpoint
 @router.post("")
