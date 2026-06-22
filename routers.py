@@ -21,6 +21,7 @@ from cloudinary_service import (
 )
 from database import get_db
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 router=APIRouter(
     prefix="/blog",
@@ -28,7 +29,7 @@ router=APIRouter(
 )
 @router.get("/health")
 async def health_check():
-    current_time = datetime.now()
+    current_time = datetime.now(ZoneInfo("Asia/Kolkata"))
 
     return {
         "status": "healthy",
